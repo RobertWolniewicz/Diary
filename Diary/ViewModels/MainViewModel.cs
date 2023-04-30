@@ -1,10 +1,13 @@
 ﻿using Diary.Commands;
 using Diary.Models;
+using Diary.Models.Domains;
+using Diary.Models.Wrappers;
 using Diary.Views;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -13,6 +16,7 @@ namespace Diary.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        Repository _repository = new Repository();
         public MainViewModel()
         {
             AddStudentsCommand = new RelayCommand(AddEditStudents);
@@ -20,6 +24,7 @@ namespace Diary.ViewModels
             DeleteStudentsCommand = new AsyncRelayCommand(DeleteStudents, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudents);
             RefreshDiary();
+            InitGroups();
         }
 
         public ICommand RefreshStudentsCommand { get; set; }
@@ -27,9 +32,9 @@ namespace Diary.ViewModels
         public ICommand EditStudentsCommand { get; set; }
         public ICommand DeleteStudentsCommand { get; set; }
 
-        Student _selectedStudent;
+        StudentWrapper _selectedStudent;
 
-        public Student SelectedStudent
+        public StudentWrapper SelectedStudent
         {
             get { return _selectedStudent; }
             set
@@ -38,9 +43,9 @@ namespace Diary.ViewModels
                 OnPropertyChanged();
             }
         }
-        ObservableCollection<Student> _students;
+        ObservableCollection<StudentWrapper> _students;
 
-        public ObservableCollection<Student> Students
+        public ObservableCollection<StudentWrapper> Students
         {
             get { return _students; }
             set
@@ -73,7 +78,15 @@ namespace Diary.ViewModels
                 OnPropertyChanged();
             }
         }
+        void InitGroups()
+        {
+            var groups = _repository.GetGroups();
+            groups.Insert(0, new Group { Id = 0, Name = "Wszyscy" });
 
+            Groups = new ObservableCollection<Group>(groups);
+
+            SelectedGroupId = 0;
+        }
         void RefreshStudents(object obj)
         {
             RefreshDiary();
@@ -89,13 +102,15 @@ namespace Diary.ViewModels
             {
                 return;
             }
-            //usuwanie
+
+            _repository.DeleteStudent(SelectedStudent.Id);
+
             RefreshDiary();
         }
 
         private void AddEditStudents(object obj)
         {
-            var addEditStudentWindow = new AddEditStudentView(obj as Student);
+            var addEditStudentWindow = new AddEditStudentView(obj as StudentWrapper);
             addEditStudentWindow.Closed += AddEditStudentWindow_Closed;
             addEditStudentWindow.ShowDialog();
         }
@@ -111,7 +126,8 @@ namespace Diary.ViewModels
         }
         void RefreshDiary()
         {
-
+            Students = new ObservableCollection<StudentWrapper>(
+                _repository.GetStudents(SelectedGroupId));
         }
     }
 }

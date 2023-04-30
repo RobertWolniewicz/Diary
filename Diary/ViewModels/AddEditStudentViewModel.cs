@@ -1,5 +1,7 @@
 ﻿using Diary.Commands;
 using Diary.Models;
+using Diary.Models.Domains;
+using Diary.Models.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,21 +15,23 @@ namespace Diary.ViewModels
 {
     public class AddEditStudentViewModel : ViewModelBase
     {
-        public AddEditStudentViewModel(Student student = null)
+        Repository _repository = new Repository();
+
+        public AddEditStudentViewModel(StudentWrapper student = null)
         {
             CloseCommand = new RelayCommand(Close);
             ConfirmCommand = new RelayCommand(Confirm);
 
             if (student == null)
             {
-                Student = new Student();
+                Student = new StudentWrapper();
             }
             else
             {
                 Student = student;
                 IsUpdate = true;
             }
-
+            InitGroups();
         }
 
 
@@ -35,9 +39,9 @@ namespace Diary.ViewModels
         public ICommand CloseCommand { get; set; }
         public ICommand ConfirmCommand { get; set; }
 
-        Student _student;
+        StudentWrapper _student;
 
-        public Student Student
+        public StudentWrapper Student
         {
             get { return _student; }
             set
@@ -82,7 +86,6 @@ namespace Diary.ViewModels
             }
         }
 
-
         private void Confirm(object obj)
         {
             if (!IsUpdate)
@@ -94,14 +97,23 @@ namespace Diary.ViewModels
             CloseWindow(obj as Window);
         }
 
+        void InitGroups()
+        {
+            var groups = _repository.GetGroups();
+            groups.Insert(0, new Group { Id = 0, Name = "-- brak --" });
+
+            Groups = new ObservableCollection<Group>(groups);
+
+            SelectedGroupId = Student.Group.Id;
+        }
         private void AddStudent()
         {
-            // baza
+            _repository.AddStudent(Student);
         }
 
         private void UpdateStudent()
         {
-            //baza
+            _repository.UpdateStudent(Student);
         }
 
         private void Close(object obj)

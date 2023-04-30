@@ -41,7 +41,7 @@
         <TextBox Text="{Binding Student.FirstName}" Grid.Row="1" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="2" Content="Nazwisko:" Margin="5"/>
-        <TextBox Text="{Binding Student.Lastname}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <TextBox Text="{Binding Student.LastName}" Grid.Row="2" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="3" Content="Matematyka:" Margin="5"/>
         <TextBox Text="{Binding Student.Math}" Grid.Row="3" Grid.Column="1" Margin="5"/>
@@ -56,7 +56,7 @@
         <TextBox Text="{Binding Student.PolishLang}" Grid.Row="6" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="7" Content="Język obc.:" Margin="5"/>
-        <TextBox Text="{Binding Student.Foreinglang}" Grid.Row="7" Grid.Column="1" Margin="5"/>
+        <TextBox Text="{Binding Student.ForeignLang}" Grid.Row="7" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="8" Content="Grupa:" Margin="5"/>
         <ComboBox 
@@ -69,7 +69,7 @@
             SelectedValuePath="Id"
             />
 
-        <CheckBox IsChecked="{Binding Student.Activitise}" Content="Zajęcia dodatkowe" Grid.Row="9" Grid.Column="1" Margin="5"/>
+        <CheckBox IsChecked="{Binding Student.Activities}" Content="Zajęcia dodatkowe" Grid.Row="9" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="10" Content="Uwagi:" Margin="5"/>
         <TextBox 

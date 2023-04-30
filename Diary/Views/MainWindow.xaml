@@ -66,6 +66,7 @@
                 <DataGridTextColumn Binding="{Binding LastName}" Header="Nazwisko"/>
                 <DataGridTextColumn Binding="{Binding Comments}" Header="Uwagi"/>
                 <DataGridTextColumn Binding="{Binding Math}" Header="Matematyka"/>
+                <DataGridTextColumn Binding="{Binding Technology}" Header="Technologia"/>
                 <DataGridTextColumn Binding="{Binding Physics}" Header="Fizyka"/>
                 <DataGridTextColumn Binding="{Binding PolishLang}" Header="Język polski"/>
                 <DataGridTextColumn Binding="{Binding ForeignLang}" Header="Język obcy"/>
