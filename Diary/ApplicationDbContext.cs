@@ -1,5 +1,6 @@
 using Diary.Models.Configurations;
 using Diary.Models.Domains;
+using Diary.Properties;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -9,7 +10,11 @@ namespace Diary
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext()
-            : base("name=ApplicationDbContext")
+            : base($"Server={Settings.Default.Address}\\" +
+                  $"{Settings.Default.ServerName};" +
+                  $"Database={Settings.Default.DbName};" +
+                  $"User Id={Settings.Default.UserName};" +
+                  $"Password={Settings.Default.Password};")
         {
         }
 

@@ -20,7 +20,7 @@ namespace Diary.ViewModels
         public AddEditStudentViewModel(StudentWrapper student = null)
         {
             CloseCommand = new RelayCommand(Close);
-            ConfirmCommand = new RelayCommand(Confirm);
+            ConfirmCommand = new RelayCommand(Confirm, CanConfirm);
 
             if (student == null)
             {
@@ -31,9 +31,9 @@ namespace Diary.ViewModels
                 Student = student;
                 IsUpdate = true;
             }
+
             InitGroups();
         }
-
 
 
         public ICommand CloseCommand { get; set; }
@@ -88,6 +88,7 @@ namespace Diary.ViewModels
 
         private void Confirm(object obj)
         {
+
             if (!IsUpdate)
                 AddStudent();
 
@@ -96,8 +97,11 @@ namespace Diary.ViewModels
 
             CloseWindow(obj as Window);
         }
-
-        void InitGroups()
+        private bool CanConfirm(object obj)
+        {
+            return Student.IsValid;
+        }
+        private void InitGroups()
         {
             var groups = _repository.GetGroups();
             groups.Insert(0, new Group { Id = 0, Name = "-- brak --" });
@@ -121,7 +125,7 @@ namespace Diary.ViewModels
             CloseWindow(obj as Window);
         }
 
-        void CloseWindow(Window window)
+        private void CloseWindow(Window window)
         {
             window.Close();
         }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Diary.ViewModels;
+using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,19 +12,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Diary
+namespace Diary.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SettingsView : MetroWindow
     {
-        public MainWindow()
+        public SettingsView(bool canClose = true)
         {
             InitializeComponent();
+            DataContext = new SettingsViewModel(canClose);
         }
     }
 }

@@ -19,10 +19,14 @@ namespace Diary.ViewModels
         Repository _repository = new Repository();
         public MainViewModel()
         {
+            ConnectionStringCheck();
+
             AddStudentsCommand = new RelayCommand(AddEditStudents);
             EditStudentsCommand = new RelayCommand(AddEditStudents, CanEditDeleteStudent);
             DeleteStudentsCommand = new AsyncRelayCommand(DeleteStudents, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudents);
+            ChangeSettingsCommand = new RelayCommand(ChangeSettings);
+
             RefreshDiary();
             InitGroups();
         }
@@ -31,6 +35,7 @@ namespace Diary.ViewModels
         public ICommand AddStudentsCommand { get; set; }
         public ICommand EditStudentsCommand { get; set; }
         public ICommand DeleteStudentsCommand { get; set; }
+        public ICommand ChangeSettingsCommand { get; set; }
 
         StudentWrapper _selectedStudent;
 
@@ -64,6 +69,7 @@ namespace Diary.ViewModels
             {
                 _selectedGroupId = value;
                 OnPropertyChanged();
+                RefreshDiary();
             }
         }
 
@@ -78,7 +84,7 @@ namespace Diary.ViewModels
                 OnPropertyChanged();
             }
         }
-        void InitGroups()
+        private void InitGroups()
         {
             var groups = _repository.GetGroups();
             groups.Insert(0, new Group { Id = 0, Name = "Wszyscy" });
@@ -87,7 +93,7 @@ namespace Diary.ViewModels
 
             SelectedGroupId = 0;
         }
-        void RefreshStudents(object obj)
+        private void RefreshStudents(object obj)
         {
             RefreshDiary();
         }
@@ -124,10 +130,51 @@ namespace Diary.ViewModels
         {
             return SelectedStudent != null;
         }
-        void RefreshDiary()
+        private void ChangeSettings(object obj)
+        {
+            var settingsWindow = new SettingsView();
+            settingsWindow.ShowDialog();
+        }
+
+        private void RefreshDiary()
         {
             Students = new ObservableCollection<StudentWrapper>(
                 _repository.GetStudents(SelectedGroupId));
+        }
+        private async void ConnectionStringCheck()
+        {
+            if (!CanConnect())
+            {
+                var metroWindow = Application.Current.MainWindow as MetroWindow;
+                var result = await metroWindow.ShowMessageAsync("Błąd połaczenia",
+                    "Nie mozna połaczyć się z baza danych. Czy chcesz zmienić ustawienia połączenia?", MessageDialogStyle.AffirmativeAndNegative);
+
+                if (result == MessageDialogResult.Negative)
+                {
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    var settingsWindow = new SettingsView(false);
+                    settingsWindow.ShowDialog();
+                }
+            }
+        }
+        private bool CanConnect()
+        {
+           try
+            {
+                using(var context = new ApplicationDbContext())
+                {
+                    context.Database.Connection.Open();
+                    context.Database.Connection.Close();
+                }
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
     }
 }
