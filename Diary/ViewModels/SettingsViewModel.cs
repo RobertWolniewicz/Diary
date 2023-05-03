@@ -48,6 +48,8 @@ namespace Diary.ViewModels
         private void Confirm(object obj)
         {
             var loginParams = obj as PasswordParams;
+            var password = loginParams.PasswordBox.Password;
+            Settings.Password = password;
 
             UpdateSettings();
 

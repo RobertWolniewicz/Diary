@@ -6,7 +6,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:converters="clr-namespace:Diary.Models.Converters"
         xmlns:local="clr-namespace:Diary"
-        mc:Ignorable="d"
+                 mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
          Name="SettingsWindow"       
         Title="Ustawienia" Height="300" Width="400">
@@ -46,7 +46,7 @@
         <PasswordBox  Name="Password" Grid.Row="4" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="5" Content="Powtórz hasło:" Margin="5"/>
-        <PasswordBox  Name="ConfirmPassword" Grid.Row="5" Grid.Column="1" Margin="5"/>
+        <PasswordBox Password="{Binding Settings.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True }" Name="ConfirmPassword" Grid.Row="5" Grid.Column="1" Margin="5"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right">
             <Button 

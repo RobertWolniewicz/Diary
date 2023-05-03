@@ -19,16 +19,16 @@ namespace Diary.ViewModels
         Repository _repository = new Repository();
         public MainViewModel()
         {
-            ConnectionStringCheck();
 
             AddStudentsCommand = new RelayCommand(AddEditStudents);
             EditStudentsCommand = new RelayCommand(AddEditStudents, CanEditDeleteStudent);
             DeleteStudentsCommand = new AsyncRelayCommand(DeleteStudents, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudents);
             ChangeSettingsCommand = new RelayCommand(ChangeSettings);
+            LoadedWindowCommand = new RelayCommand(LoadedWindow);
 
-            RefreshDiary();
-            InitGroups();
+            LoadedWindow(null);
+
         }
 
         public ICommand RefreshStudentsCommand { get; set; }
@@ -36,6 +36,7 @@ namespace Diary.ViewModels
         public ICommand EditStudentsCommand { get; set; }
         public ICommand DeleteStudentsCommand { get; set; }
         public ICommand ChangeSettingsCommand { get; set; }
+        public ICommand LoadedWindowCommand { get; set; }
 
         StudentWrapper _selectedStudent;
 
@@ -141,7 +142,7 @@ namespace Diary.ViewModels
             Students = new ObservableCollection<StudentWrapper>(
                 _repository.GetStudents(SelectedGroupId));
         }
-        private async void ConnectionStringCheck()
+        private async void LoadedWindow(object obj)
         {
             if (!CanConnect())
             {
@@ -158,6 +159,11 @@ namespace Diary.ViewModels
                     var settingsWindow = new SettingsView(false);
                     settingsWindow.ShowDialog();
                 }
+            }
+            else
+            {
+                RefreshDiary();
+                InitGroups();
             }
         }
         private bool CanConnect()
