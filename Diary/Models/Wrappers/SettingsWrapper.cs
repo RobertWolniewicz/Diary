@@ -124,10 +124,10 @@ namespace Diary.Models.Wrappers
                 return _isServerAddressValid &&
                     _isServerNameValid &&
                     _isDbNameValid &&
-                    _isUserNameValid; 
-                    //&& _isPasswordValid && 
-                    //_isConfirmedPasswordValid && 
-                    //_isPasswordsAreSame;
+                    _isUserNameValid 
+                    && _isPasswordValid && 
+                    _isConfirmedPasswordValid && 
+                    _isPasswordsAreSame;
             }
         }
 

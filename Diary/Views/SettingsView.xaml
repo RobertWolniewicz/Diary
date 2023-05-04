@@ -43,11 +43,28 @@
         <TextBox Text="{Binding Settings.UserName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Grid.Row="3" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="4" Content="Hasło:" Margin="5"/>
-        <PasswordBox  Name="Password" Grid.Row="4" Grid.Column="1" Margin="5"/>
+        <PasswordBox  
+            local:PasswordBoxAssistant.BindPassword="True"
+                
+                local:PasswordBoxAssistant.BoundPassword="{Binding Path=Settings.Password,
+      UpdateSourceTrigger=PropertyChanged,
+      ValidatesOnDataErrors=True,
+      ValidatesOnExceptions=True,
+               Mode=TwoWay}"
+                      
+                      Name="Password" Grid.Row="4" Grid.Column="1" Margin="5"/>
 
         <Label Grid.Row="5" Content="Powtórz hasło:" Margin="5"/>
-        <PasswordBox Password="{Binding Settings.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True }" Name="ConfirmPassword" Grid.Row="5" Grid.Column="1" Margin="5"/>
-
+        <PasswordBox  
+            local:PasswordBoxAssistant.BindPassword="True"
+                
+                local:PasswordBoxAssistant.BoundPassword="{Binding Path=Settings.ConfirmedPassword ,
+      UpdateSourceTrigger=PropertyChanged,
+      ValidatesOnDataErrors=True,
+      ValidatesOnExceptions=True,
+               Mode=TwoWay}"
+                      
+                      Name="ConfirmedPassword" Grid.Row="5" Grid.Column="1" Margin="5"/>
         <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right">
             <Button 
                 Command="{Binding CloseCommand}" 
@@ -62,13 +79,6 @@
                 Height="25" 
                 Width="100" 
                 Margin="5">
-                <Button.CommandParameter>
-                    <MultiBinding Converter="{StaticResource passwordConverter}">
-                        <Binding ElementName="SettingsWindow" />
-                        <Binding ElementName="Password" />
-                        <Binding ElementName="ConfirmPassword" />
-                    </MultiBinding>
-                </Button.CommandParameter>
             </Button>
         </StackPanel>
     </Grid>
